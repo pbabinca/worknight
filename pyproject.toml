@@ -1,0 +1,257 @@
+[build-system]
+requires = ["flit", "cython"]
+build-backend = "flit.buildapi"
+
+[project]
+name =  "worknight"
+authors = [
+    {name = "Pavol Babinčák", email = "pbabinca@redhat.com"},
+]
+readme = "README.md"
+license = {file = "LICENSE"}
+dynamic = ["version"]
+dependencies = [
+    "appdirs",
+    "backoff",
+    "click",
+    "click-option-group",
+    "click-spinner",
+    "colorlog",
+    "dateparser",
+    "pyaml",
+    "ruamel.yaml",
+    "selenium",
+]
+description = "Interact with Workday in a shadow way"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    # Prevent the package from being uploaded to PyPI
+    "Private :: Do Not Upload"
+]
+requires-python = ">=3.8.1"
+
+[project.urls]
+Documentation = "https://github.com/pbabinca/worknight/tree/main#readme"
+Source = "https://github.com/pbabinca/worknight"
+Tracker = "https://github.com/pbabinca/worknight/issues"
+
+[project.optional-dependencies]
+dev = [
+    "isort",
+    "black",
+    "logging_tree",
+    "tox",
+]
+test = [
+    "bandit[toml]==1.7.5",
+    "black==23.3.0",
+    "check-manifest==0.49",
+    "flake8-bugbear==23.5.9",
+    "flake8-docstrings",
+    "flake8-formatter_junit_xml",
+    "flake8",
+    "flake8-pyproject",
+    "pre-commit==3.3.1",
+    "pylint==2.17.4",
+    "pylint_junit",
+    "shellcheck-py==0.9.0.2"
+]
+
+
+[project.scripts]
+wn = "worknight.cli:main"
+
+[tool.flit.module]
+name = "worknight"
+
+[tool.flit.external-data]
+directory = "src/worknight/data"
+
+[tool.bandit]
+exclude_dirs = ["build","dist","tests","scripts"]
+number = 4
+recursive = true
+targets = "src"
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+fail_under = 100
+
+[tool.flake8]
+max-line-length = 120
+exclude = [
+    ".eggs",
+    ".git",
+    ".tox",
+    "nssm",
+    "obj",
+    "out",
+    "packages",
+    "pywin32",
+    "tests",
+    "swagger_client",
+    "venv"
+]
+ignore = [
+    "E722",
+    "B001",
+    "W503",
+    "E203"
+]
+
+[tool.isort]
+profile = "black"
+
+[tool.pyright]
+include = ["src"]
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+]
+venv = "env38"
+
+reportMissingImports = true
+reportMissingTypeStubs = false
+
+pythonVersion = "3.8"
+pythonPlatform = "Linux"
+
+executionEnvironments = [
+  { root = "src" }
+]
+
+[tool.pylint.'MESSAGES CONTROL']
+enable="c-extension-no-member"
+
+[tool.pylint.'REPORTS']
+evaluation="10.0 - ((float(5 * error + warning + refactor + convention) / statement) * 10)"
+output-format="text"
+reports="no"
+score="yes"
+
+[tool.pylint.'REFACTORING']
+max-nested-blocks=5
+never-returning-functions="sys.exit"
+
+[tool.pylint.'BASIC']
+argument-naming-style="snake_case"
+attr-naming-style="snake_case"
+bad-names= [
+    "foo",
+    "bar"
+]
+class-attribute-naming-style="any"
+class-naming-style="PascalCase"
+const-naming-style="UPPER_CASE"
+docstring-min-length=-1
+function-naming-style="snake_case"
+good-names= [
+    "i",
+    "j",
+    "k",
+    "ex",
+    "Run",
+    "_"
+]
+include-naming-hint="yes"
+inlinevar-naming-style="any"
+method-naming-style="snake_case"
+module-naming-style="any"
+no-docstring-rgx="^_"
+property-classes="abc.abstractproperty"
+variable-naming-style="snake_case"
+
+[tool.pylint.'FORMAT']
+ignore-long-lines="^\\s*(# )?.*['\"]?<?https?://\\S+>?"
+indent-after-paren=4
+indent-string='    '
+max-line-length=120
+max-module-lines=1000
+single-line-class-stmt="no"
+single-line-if-stmt="no"
+
+[tool.pylint.'LOGGING']
+logging-format-style="old"
+logging-modules="logging"
+
+[tool.pylint.'MISCELLANEOUS']
+notes= [
+    "FIXME",
+    "XXX",
+    "TODO"
+]
+
+[tool.pylint.'SIMILARITIES']
+ignore-comments="yes"
+ignore-docstrings="yes"
+ignore-imports="yes"
+min-similarity-lines=7
+
+[tool.pylint.'SPELLING']
+max-spelling-suggestions=4
+spelling-store-unknown-words="no"
+
+[tool.pylint.'STRING']
+check-str-concat-over-line-jumps="no"
+
+[tool.pylint.'VARIABLES']
+additional-builtins="dbutils"
+allow-global-unused-variables="yes"
+callbacks= [
+    "cb_",
+    "_cb"
+]
+dummy-variables-rgx="_+$|(_[a-zA-Z0-9_]*[a-zA-Z0-9]+?$)|dummy|^ignored_|^unused_"
+ignored-argument-names="_.*|^ignored_|^unused_"
+init-import="no"
+redefining-builtins-modules="six.moves,past.builtins,future.builtins,builtins,io"
+
+[tool.pylint.'CLASSES']
+defining-attr-methods= [
+    "__init__",
+    "__new__",
+    "setUp",
+    "__post_init__"
+]
+exclude-protected= [
+    "_asdict",
+    "_fields",
+    "_replace",
+    "_source",
+    "_make"
+]
+valid-classmethod-first-arg="cls"
+valid-metaclass-classmethod-first-arg="cls"
+
+[tool.pylint.'DESIGN']
+max-args=5
+max-attributes=7
+max-bool-expr=5
+max-branches=12
+max-locals=15
+max-parents=7
+max-public-methods=20
+max-returns=6
+max-statements=50
+min-public-methods=2
+
+[tool.pylint.'IMPORTS']
+allow-wildcard-with-all="no"
+analyse-fallback-blocks="no"
+deprecated-modules="optparse,tkinter.tix"
+
+[tool.pylint.'EXCEPTIONS']
+overgeneral-exceptions= [
+    "BaseException",
+    "Exception"
+]

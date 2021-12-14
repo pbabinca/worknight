@@ -1,0 +1,58 @@
+---
+version: 1
+disable_existing_loggers: false
+formatters:
+  colored-time:
+    '()': 'colorlog.ColoredFormatter'
+    format: "%(reset)s%(asctime)s.%(msecs)03d %(log_color)s%(levelname)-8s%(reset)s %(name)s %(log_color)s%(message)s"
+    datefmt: '%H:%M:%S'
+    log_colors:
+      DEBUG: cyan
+      INFO: green
+      WARNING: yellow
+      ERROR: red
+      CRITICAL: bold_red
+  colored-time-location:
+    '()': 'colorlog.ColoredFormatter'
+    format: "%(reset)s%(asctime)s.%(msecs)03d %(log_color)s%(levelname)-8s%(reset)s %(name)s %(thin_cyan)s%(pathname)s@%(lineno)d%(reset)s %(log_color)s%(message)s"
+    datefmt: '%H:%M:%S'
+    log_colors:
+      DEBUG: cyan
+      INFO: green
+      WARNING: yellow
+      ERROR: red
+      CRITICAL: bold_red
+handlers:
+  console-error-colored-time:
+    class: logging.StreamHandler
+    formatter: colored-time
+    level: ERROR
+  console-warning-colored-time:
+    class: logging.StreamHandler
+    formatter: colored-time
+    level: WARNING
+  console-debug-colored-time:
+    class: logging.StreamHandler
+    formatter: colored-time
+    level: DEBUG
+  console-debug-colored-time-location:
+    class: logging.StreamHandler
+    formatter: colored-time-location
+    level: DEBUG
+root:
+  handlers:
+    - console-error-colored-time
+  level: DEBUG
+loggers:
+  selenium:
+    level: DEBUG
+  selenium.webdriver.remote.remote_connection:
+    # Prevent printing all POST requests sent to the remote driver
+    level: WARNING
+  urllib3.connectionpool:
+    # Prevent printing establishing of connections
+    level: WARNING
+  worknight:
+    level: DEBUG
+  selenium.webdriver.common.selenium_manager:
+    level: WARNING
